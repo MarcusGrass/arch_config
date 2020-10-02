@@ -12,6 +12,12 @@ sudo pacman -S dhcpcd --noconfirm
 # Time
 sudo pacman -S ntp --noconfirm
 
+# Install essentials, gvim for clipboard support etc
+sudo pacman -S gvim --noconfirm
+sudo pacman -S bash-completion --noconfirm
+sudo pacman -S openssl --noconfirm
+sudo pacman -S openssh --noconfirm
+
 # Git and generate keys
 EMAIL="marcus.grass@gmail.com"
 echo "Installing git and generating keys for $EMAIL"
@@ -24,12 +30,6 @@ git config --global rerere.enabled true
 ssh-keygen -t rsa -b 4096 -C $EMAIL
 ssh-add ~/.ssh/id_rsa
 echo "Add the key from ~/.ssh/id_rsa to github to finish git install"
-
-# Install essentials, gvim for clipboard support etc
-sudo pacman -S gvim --noconfirm
-sudo pacman -S bash-completion --noconfirm
-sudo pacman -S openssl --noconfirm
-sudo pacman -S openssh --noconfirm
 
 # install xmonad and xterm
 sudo pacman -S xorg-server --noconfirm
