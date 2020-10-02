@@ -66,6 +66,7 @@ rustup toolchain install stable
 # Docker
 sudo pacman -S docker --noconfirm
 sudo pacman -S docker-compose --noconfirm
+# Needed for no-sudo docker
 sudo groupadd docker
 sudo gpasswd -a gramar docker
 
