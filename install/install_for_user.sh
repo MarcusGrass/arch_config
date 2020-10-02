@@ -1,8 +1,8 @@
 #!/bin/bash
-# Check that the correct args are supplied
+# Check that the correct user is running
 USER=$(whoami)
 if [ "$USER" != "gramar" ]; then
-	echo "Needs to be run as gramar"
+	echo "Needs to be run as gramar, you are running as $USER"
 	exit 1
 fi
 
