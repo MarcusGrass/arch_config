@@ -33,65 +33,14 @@ arch-chroot /mnt
 if using intel run below to avoid boot issues  
 pacman -S intel-ucode
 
-//1. with scripts  
-pacman -S gi  
+(Can do steps in install/chroot_encrypted_disks.sh manually)   
+
+pacman -S openssl
+pacman -S openssh
+pacman -S git  
 mkdir /home/setup  
 cd /home/setup  
 git clone https://github.com/MarcusGrass/arch_config.git  
 cd arch_config    
 chmod +x install/chroot_encrypted_disks.sh  
 ./install/chroot_encrypted_disks.sh  
-//2 manual  
-pacman -S grub    
-pacman -S efibootmgr    
-pacman -S lvm2    
-  
-
--- now set up post boot auto decryption, no need for swap --  
-dd bs=512 count=4 if=/dev/random of=/root/croot.keyfile iflag=fullblock  
-chmod 000 /root/croot.keyfile  
-dd bs=512 count=4 if=/dev/random of=/etc/cryptsetup-keys.d/home.key iflag=fullblock  
-chmod 000 /etc/cryptsetup-keys.d/home.key  
-cryptsetup -v luksAddKey /dev/sda3 /root/croot.keyfile  
-cryptsetup -v luksAddKey /dev/sda5 /etc/cryptsetup-keys.d/home.key    
-
--- boot doesn't unencrypt home --
-
-/etc/mkinitcpio.conf
-FILES=(/root/croot.keyfile)
-
-/etc/default/grub  
-GRUB_ENABLE_CRYPTODISK=y  
-
-/etc/default/grub  
-GRUB_CMDLINE_LINUX="... cryptdevice=UUID=(device-UUID for /dev/sda3):croot root=/dev/mapper/croot cryptkey=rootfs:/root/croot.keyfile ..."  
-
-swap	UUID=(device UUID for /dev/sda4)	/dev/urandom	swap,cipher=aes-xts-plain64,size=256
-home    UUID=(device UUID for /dev/sda5)    /etc/cryptsetup-keys.d/home.key
-
-/etc/hostname  
-add hostname  
-
-/etc/locale.gen  
-uncomment en_US.UTF-8 UTF-8  
-
-locale-gen  
-echo LANG=en_US.UTF-8 > /etc/locale.conf  
-export LANG=en_US.UTF-8  
-ln -s /usr/share/zoneinfo/Europe/Stockholm /etc/localtime  
-hwclock --systohc --utc  
-passwd  
-
--- Fix wifi necessities --  
-pacman -S iwd  
-pacman -S dhcpcd  
-
--- add gramar user --  
-
-grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB --recheck  
-grub-install --target=i386-pc --recheck /dev/sda  
-mkinitcpio -P linux  
-grub-mkconfig -o /boot/grub/grub.cfg  
-
-exit  
-reboot  

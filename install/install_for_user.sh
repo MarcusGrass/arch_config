@@ -18,6 +18,9 @@ sudo pacman -S bash-completion --noconfirm
 sudo pacman -S openssl --noconfirm
 sudo pacman -S openssh --noconfirm
 
+# Gonna need this sooner or later...
+sudo pacman -S linux-headers --noconfirm
+
 # Git and generate keys
 EMAIL="marcus.grass@gmail.com"
 echo "Installing git and generating keys for $EMAIL"

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Add boot deps
 pacman -S grub --noconfirm
 pacman -S efibootmgr --noconfirm
 pacman -S python3 --noconfirm
