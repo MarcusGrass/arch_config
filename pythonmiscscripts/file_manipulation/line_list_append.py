@@ -1,5 +1,5 @@
 from pythonmiscscripts.file_manipulation.line_replace import replace_on_match, modify
-from pythonmiscscripts.file_manipulation.utils import LineParser, FileModifier, ManipulationResult
+from pythonmiscscripts.file_manipulation.file_modifier import LineParser, FileModifier, ManipulationResult
 
 
 def insert_unique_to_list(file_name: str, items: [str], start_str: str, list_start: str,

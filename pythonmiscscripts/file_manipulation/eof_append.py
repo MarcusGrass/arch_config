@@ -1,4 +1,4 @@
-from pythonmiscscripts.file_manipulation.utils import FileModifier, OpenFileModification, \
+from pythonmiscscripts.file_manipulation.file_modifier import FileModifier, OpenFileModification, \
     null_match_parser, LineParser, ManipulationResult
 
 

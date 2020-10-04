@@ -25,14 +25,6 @@ def null_match_parser(replacement: str) -> LineParser:
 
 
 @dataclass
-class FileLinesMutator:
-    transformer: Callable
-
-    def transform(self, lines: list):
-        return self.transformer(lines)
-
-
-@dataclass
 class OpenFileModification:
     output_lines: [str]
     input_lines: [str]

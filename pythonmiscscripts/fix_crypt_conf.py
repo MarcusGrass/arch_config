@@ -1,7 +1,7 @@
 import argparse
 import re
 from dataclasses import dataclass
-from pythonmiscscripts.file_manipulation.utils import LineParser, ManipulationResult
+from pythonmiscscripts.file_manipulation.file_modifier import LineParser, ManipulationResult
 from pythonmiscscripts.file_manipulation.line_list_append import insert_unique_to_list
 from pythonmiscscripts.file_manipulation.eof_append import append_lines_to_end
 from pythonmiscscripts.file_manipulation.next_line_append import insert_after_match
