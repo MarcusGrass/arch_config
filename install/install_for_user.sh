@@ -48,7 +48,7 @@ sudo pacman -S pavucontrol --noconfirm
 sudo pacman -S pulseaudio-bluetooth --noconfirm
 sudo pacman -S pulsemixer --noconfirm
 sudo pacman -S bluez --noconfirm
-sudo pacman -S bluez-util--noconfirm
+sudo pacman -S bluez-utils--noconfirm
 
 # Java
 sudo pacman -S jdk11-openjdk --noconfirm
@@ -105,13 +105,21 @@ cp ~/code/arch_config/.xscreensaver ~/.xscreensaver
 cp ~/code/arch_config/.bashrc ~/.bashrc
 cp ~/code/arch_config/.xmobarrc ~/.xmobarrc
 
+# Prepare bluetooth
+sudo python3 ~/code/arch_config/pythonmiscscripts/update_bt_conf.py
+
 # Start services
 echo "Enabling services now"
 sudo systemctl enable --now bluetooth
 sudo systemctl enable --now cronie
 sudo systemctl enable --now dhcpcd
 sudo systemctl enable --now ntpd
-pulseaudio --start
+sudo pulseaudio -D
+
+# Set bluetooth agent on
+echo "Setting up default BT agent"
+sudo bluetoothctl -- default-agent
+sudo bluetoothctl -- power on
 
 # download drivers
 echo "Video driver is: $(lspci | grep -e VGA -e 3D)"
