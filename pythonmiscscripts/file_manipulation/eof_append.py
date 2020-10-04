@@ -14,13 +14,16 @@ def create_parsers(lines: [str]) -> [LineParser]:
     return parsers
 
 
-def modify(f: OpenFileModification):
+def modify(f: OpenFileModification) -> bool:
+    any_change = False
     for line in f.input_lines:
         f.output_lines.append(line)
     if len(f.parsers) > 0:
         f.output_lines.append("\n")
     for repl in f.parsers:
         f.output_lines.append(repl.generate_replacement(""))
+        any_change = True
+    return any_change
 
 
 if __name__ == "__main__":

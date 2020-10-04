@@ -37,10 +37,11 @@ def parse_uuid(line: str) -> str:
 
 
 def update_default_grub(root_uuid: str, root_key_file: str):
-    grub_default = "/etc/defalt/grub"
-    success = append_lines_to_end(grub_default, "GRUB_ENABLE_CRYPTODISK=y")
+    grub_default = "/etc/default/grub"
+    success = append_lines_to_end(grub_default, ["GRUB_ENABLE_CRYPTODISK=y"])
     if not success:
         print("Failed to update %s, needs manual fixing" % grub_default, flush=True)
+        return
 
     cmd_line = "cryptdevice=UUID=%s:croot" \
                " root=/dev/mapper/croot cryptkey=rootfs:%s" % (root_uuid, root_key_file)
