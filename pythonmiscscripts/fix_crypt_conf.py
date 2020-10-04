@@ -45,7 +45,6 @@ def update_default_grub(root_uuid: str, root_key_file: str):
 
     cmd_line = "cryptdevice=UUID=%s:croot" \
                " root=/dev/mapper/croot cryptkey=rootfs:%s" % (root_uuid, root_key_file)
-
     success = insert_unique_to_list(file_name=grub_default, items=cmd_line.split(" "),
                                     start_str="GRUB_CMDLINE_LINUX=", list_start='"', list_closure='"', list_sep=" ")
     if not success:
@@ -75,7 +74,7 @@ def update_mkinitcpio(root_key_file: str):
 
 def update_crypttab(uuids: DevUuids, home_key_file: str):
     crypttab = "/etc/crypttab"
-    swap = "swap    UUID=%s    /dev/urandom    swap,cipher=aes-xts-plain64,size=256" % uuids.swap
+    swap = "swap    UUID=%s    /dev/urandom    swap,cipher=aes-cbc-essiv:sha256,size=256" % uuids.swap
     home = "home    UUID=%s    %s" % (uuids.home, home_key_file)
     success = append_lines_to_end(crypttab, [swap, home])
     if not success:

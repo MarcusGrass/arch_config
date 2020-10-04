@@ -1,10 +1,10 @@
 from pythonmiscscripts.file_manipulation.utils import FileModifier, OpenFileModification, null_match_parser, LineParser
 
 
-def append_lines_to_end(file_name: str, lines: [str]):
+def append_lines_to_end(file_name: str, lines: [str]) -> bool:
     parsers = create_parsers(lines)
     with FileModifier(file_name, parsers) as f:
-        modify(f)
+        return modify(f)
 
 
 def create_parsers(lines: [str]) -> [LineParser]:

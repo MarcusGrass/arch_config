@@ -57,9 +57,15 @@ class FileModifier(object):
             if self.has_committable_change():
                 print("Updating file %s, line diff=%s" % (self.file_name, len(self.modified) - len(self.input_lines)),
                       flush=True)
-                self.write()
+                for line in self.modified:
+                    if line not in self.input_lines:
+                        print(line, flush=True)
             else:
                 print("Change already present in %s, will not write" % self.file_name, flush=True)
+                for line in self.modified:
+                    if line not in self.input_lines:
+                        print(line, flush=True)
+
 
     def read_lines_and_trim_parsers(self) -> [str]:
         with open(self.file_name, "r") as file:
