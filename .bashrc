@@ -30,6 +30,7 @@ alias unlock_resolv='sudo chattr -i /etc/resolv.conf'
 alias bt='sudo bluetoothctl'
 alias bt_re='sudo /bin/bash /home/gramar/code/arch_config/bash/bt_clear.sh'
 alias bt_con='sudo bluetoothctl -- connect 4C:87:5D:2C:57:6A'
+alias bt_dc='sudo bluetoothctl -- disconnect 4C:87:5D:2C:57:6A'
 
 
 # Git
@@ -42,3 +43,4 @@ alias j8='sudo archlinux-java set java-8-openjdk'
 
 # Idk what this is, probably shouldn't remove
 PS1='[\u@\h \W]\$ '
+
