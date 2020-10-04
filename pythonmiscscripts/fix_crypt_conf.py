@@ -1,7 +1,7 @@
 import argparse
 import re
 from dataclasses import dataclass
-from pythonmiscscripts.file_manipulation.utils import LineParser
+from pythonmiscscripts.file_manipulation.utils import LineParser, ManipulationResult
 from pythonmiscscripts.file_manipulation.line_list_append import insert_unique_to_list
 from pythonmiscscripts.file_manipulation.eof_append import append_lines_to_end
 from pythonmiscscripts.file_manipulation.next_line_append import insert_after_match
@@ -39,7 +39,7 @@ def parse_uuid(line: str) -> str:
 def update_default_grub(root_uuid: str, root_key_file: str):
     grub_default = "/etc/default/grub"
     success = append_lines_to_end(grub_default, ["GRUB_ENABLE_CRYPTODISK=y"])
-    if not success:
+    if success == ManipulationResult.NO_MATCH:
         print("Failed to update %s, needs manual fixing" % grub_default, flush=True)
         return
 
@@ -47,12 +47,12 @@ def update_default_grub(root_uuid: str, root_key_file: str):
                " root=/dev/mapper/croot cryptkey=rootfs:%s" % (root_uuid, root_key_file)
     success = insert_unique_to_list(file_name=grub_default, items=cmd_line.split(" "),
                                     start_str="GRUB_CMDLINE_LINUX=", list_start='"', list_closure='"', list_sep=" ")
-    if not success:
+    if success == ManipulationResult.NO_MATCH:
         linux_line = 'GRUB_CMDLINE_LINUX="' + cmd_line + '"'
         success = insert_after_match(grub_default, LineParser(match=lambda l: l.startswith("GRUB_DISTRIBUTOR"),
                                                               replacer=lambda _: linux_line))
 
-    if not success:
+    if success == ManipulationResult.NO_MATCH:
         print("Failed to update %s, needs manual fixing" % grub_default, flush=True)
 
 
@@ -61,14 +61,14 @@ def update_mkinitcpio(root_key_file: str):
     items = [root_key_file]
     success = insert_unique_to_list(file_name=mkinit, items=items,
                                     start_str="FILES=", list_start="(", list_closure=")", list_sep=" ")
-    if not success:
+    if success == ManipulationResult.NO_MATCH:
         print("Failed to update %s, needs manual fixing" % mkinit, flush=True)
         return
 
     items = ["keyboard", "keymap", "encrypt"]
     success = insert_unique_to_list(file_name=mkinit, items=items,
                                     start_str="HOOKS=", list_start="(", list_closure=")", list_sep=" ")
-    if not success:
+    if success == ManipulationResult.NO_MATCH:
         print("Failed to update %s, needs manual fixing" % mkinit, flush=True)
 
 
@@ -77,7 +77,7 @@ def update_crypttab(uuids: DevUuids, home_key_file: str):
     swap = "swap    UUID=%s    /dev/urandom    swap,cipher=aes-cbc-essiv:sha256,size=256" % uuids.swap
     home = "home    UUID=%s    %s" % (uuids.home, home_key_file)
     success = append_lines_to_end(crypttab, [swap, home])
-    if not success:
+    if success == ManipulationResult.NO_MATCH:
         print("Failed to update %s, needs manual fixing" % crypttab, flush=True)
 
 
@@ -93,9 +93,9 @@ if __name__ == "__main__":
     if lsblk is None or home_key is None or root_key is None:
         print("Missing arguments expected -in, -ckf, and -hkf")
         exit(-1)
-    uuids = get_uuids(lsblk_output=lsblk)
-    update_default_grub(uuids.root, root_key)
+    parsed_uuids = get_uuids(lsblk_output=lsblk)
+    update_default_grub(parsed_uuids.root, root_key)
     update_mkinitcpio(root_key)
-    update_crypttab(uuids, home_key)
+    update_crypttab(parsed_uuids, home_key)
     # with open("lsblk_tst.txt", "r") as file:
     #     print(get_uuids(file.read()))

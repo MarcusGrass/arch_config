@@ -1,10 +1,10 @@
-from pythonmiscscripts.file_manipulation.utils import FileModifier, OpenFileModification, null_match_parser, LineParser
+from pythonmiscscripts.file_manipulation.utils import FileModifier, OpenFileModification, \
+    null_match_parser, LineParser, ManipulationResult
 
 
-def append_lines_to_end(file_name: str, lines: [str]) -> bool:
+def append_lines_to_end(file_name: str, lines: [str]) -> ManipulationResult:
     parsers = create_parsers(lines)
-    with FileModifier(file_name, parsers) as f:
-        return modify(f)
+    return FileModifier.modify(file_name, parsers, modify)
 
 
 def create_parsers(lines: [str]) -> [LineParser]:
@@ -30,9 +30,9 @@ if __name__ == "__main__":
     l1 = "some"
     l2 = "lines"
     to_append = "appended"
-    parsers = create_parsers([to_append])
-    assert len(parsers) == 1
-    fmod = FileModifier("eof_append_tst.txt", parsers)
+    line_parsers = create_parsers([to_append])
+    assert len(line_parsers) == 1
+    fmod = FileModifier("eof_append_tst.txt", line_parsers)
     modify(fmod.read_lines_and_trim_parsers())
     after = fmod.modified
     assert len(after) == 4

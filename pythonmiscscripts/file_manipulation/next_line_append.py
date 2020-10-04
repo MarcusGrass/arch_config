@@ -1,9 +1,8 @@
-from pythonmiscscripts.file_manipulation.utils import LineParser, FileModifier, OpenFileModification
+from pythonmiscscripts.file_manipulation.utils import LineParser, FileModifier, OpenFileModification, ManipulationResult
 
 
-def insert_after_match(file_name: str, next_line_appenders: [LineParser]) -> bool:
-    with FileModifier(file_name, next_line_appenders) as f:
-        return modify(f)
+def insert_after_match(file_name: str, next_line_appenders: [LineParser]) -> ManipulationResult:
+    return FileModifier.modify(file_name, next_line_appenders, modify)
 
 
 def modify(f: OpenFileModification) -> bool:

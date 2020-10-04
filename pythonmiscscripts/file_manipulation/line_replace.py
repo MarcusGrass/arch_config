@@ -1,9 +1,8 @@
-from pythonmiscscripts.file_manipulation.utils import LineParser, FileModifier, OpenFileModification
+from pythonmiscscripts.file_manipulation.utils import LineParser, FileModifier, OpenFileModification, ManipulationResult
 
 
-def replace_on_match(file_name: str, line_replacers: [LineParser]) -> bool:
-    with FileModifier(file_name, line_replacers) as f:
-        return modify(f)
+def replace_on_match(file_name: str, line_replacers: [LineParser]) -> ManipulationResult:
+    return FileModifier.modify(file_name, line_replacers, modify)
 
 
 def modify(f: OpenFileModification) -> bool:

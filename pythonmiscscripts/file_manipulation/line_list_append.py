@@ -1,9 +1,9 @@
 from pythonmiscscripts.file_manipulation.line_replace import replace_on_match, modify
-from pythonmiscscripts.file_manipulation.utils import LineParser, FileModifier
+from pythonmiscscripts.file_manipulation.utils import LineParser, FileModifier, ManipulationResult
 
 
 def insert_unique_to_list(file_name: str, items: [str], start_str: str, list_start: str,
-                          list_closure: str, list_sep: str) -> bool:
+                          list_closure: str, list_sep: str) -> ManipulationResult:
     parser = create_parser(items, start_str, list_start, list_closure, list_sep)
     return replace_on_match(file_name, [parser])
 
@@ -15,8 +15,9 @@ def create_parser(items: [str], start_str: str, list_start: str, list_closure: s
                       with_newline=False)
 
 
-def internal_list_mutation(line: str, items: [str], start_str: str, list_start: str, list_closure: str, list_sep: str) -> str:
-    list_s_ind = line.find(list_start) + len(list_start) -1
+def internal_list_mutation(line: str, items: [str], start_str: str, list_start: str,
+                           list_closure: str, list_sep: str) -> str:
+    list_s_ind = line.find(list_start) + len(list_start) - 1
     list_e_ind = line.rfind(list_closure)
     list_end = line[list_e_ind:]
     current = line[list_s_ind + 1:list_e_ind].split(list_sep)
