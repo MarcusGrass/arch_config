@@ -1,0 +1,9 @@
+NAME      FSTYPE      FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
+sda                                                                                   
+|-sda1                                                                                
+|-sda2    vfat        FAT32       98E5-65C0                             798.2M     0% /efi
+|-sda3    crypto_LUKS 1           417b46d7-5570-2fa3-8109-ff27b4df67cd                
+| `-croot ext4        1.0         854501e8-bf66-1e81-a153-70616797215c   58.4G     9% /
+|-sda4    swap        1           29dcd9a2-0584-44de-af91-1e6ee838447e                [SWAP]
+`-sda5    crypto_LUKS 1           16a34975-2fb0-4452-983b-d88ea7db8a55                
+  `-home  ext4        1.0         13fd91c2-6e96-4676-9011-3aed301b6306  138.7G     1% /home
