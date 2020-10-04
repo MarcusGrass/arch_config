@@ -16,6 +16,7 @@ alias endx='python /home/gramar/code/arch_config/pythonmiscscripts/kill_x.py'
 alias lock='xscreensaver-command -lock'
 alias ssh='. code/arch_config/bash/ssh.sh'
 alias ss='maim -s -u | xclip -selection clipboard -t image/png -i'
+alias startx='ssh-agent startx' # ssh agent on session start
 
 # Vpn
 alias vpn_con='sudo /bin/bash /home/gramar/code/arch_config/bash/vpn.sh -c && sudo chattr +i /etc/resolv.conf'
