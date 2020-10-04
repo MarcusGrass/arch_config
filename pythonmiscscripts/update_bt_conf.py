@@ -1,6 +1,7 @@
 from pythonmiscscripts.file_manipulation.utils import LineParser
 from pythonmiscscripts.file_manipulation.line_replace import replace_on_match
 from pythonmiscscripts.file_manipulation.next_line_append import insert_after_match
+from pythonmiscscripts.file_manipulation.eof_append import append_lines_to_end
 
 """
 Should be idem
@@ -21,16 +22,15 @@ def append_policy() -> LineParser:
 
 
 def append_pulse_system_bt():
-    with open("/etc/pulse/system.pa", "a") as file:
-        file.write("\n### Enable bt\n"
-                   "load-module module-bluetooth-policy\n"
-                   "load-module module-bluetooth-discover\n")
+    append_lines_to_end("/etc/pulse/system.pa", [
+        "### Enable bt", "load-module module-bluetooth-policy", "load-module module-bluetooth-discover"
+    ])
 
 
 def append_pulse_default_bt():
-    with open("/etc/pulse/default.pa", "a") as file:
-        file.write("\n### Enable bt switch on connect\n"
-                   "load-module module-switch-on-connect\n")
+    append_lines_to_end("/etc/pulse/default.pa", [
+        "### Enable bt switch on connect", "load-module module-switch-on-connect"
+    ])
 
 
 def set_pulse_autospawn():

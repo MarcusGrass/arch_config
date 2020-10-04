@@ -14,6 +14,10 @@ class LineParser:
             return None
 
 
+def null_match_parser(replacement: str) -> LineParser:
+    return LineParser(lambda _: True, lambda _: replacement)
+
+
 @dataclass
 class FileLinesMutator:
     transformer: Callable
@@ -31,8 +35,11 @@ class OpenFileModification:
 
 class FileModifier(object):
     def __init__(self, file_name: str, parsers: [LineParser]):
+        if not type(parsers) == list and type(parsers) == LineParser:
+            self.parsers = [parsers]
+        else:
+            self.parsers = parsers
         self.file_name = file_name
-        self.parsers = parsers
         self.file = None
         self.input_lines = None
         self.modified = list()
@@ -43,7 +50,9 @@ class FileModifier(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_tb is None:
             if self.has_committable_change():
-                print("Updating file %s, line diff=%s" % (self.file_name, len(self.input_lines) - len(self.modified)), flush=True)
+                print("Updating file %s, line diff=%s" % (self.file_name, len(self.modified) - len(self.input_lines)),
+                      flush=True)
+                self.write()
             else:
                 print("Change already present in %s, will not write" % self.file_name, flush=True)
 
@@ -63,6 +72,10 @@ class FileModifier(object):
     def has_committable_change(self):
         return self.input_lines != self.modified and len(self.modified) != 0
 
+    def write(self):
+        with open(self.file_name, "w") as file:
+            file.writelines(self.modified)
+
     @staticmethod
     def replacement_present(lines: list, parser: LineParser) -> bool:
         for line in lines:
@@ -71,11 +84,6 @@ class FileModifier(object):
                 if none_on_miss in lines:
                     return True
         return False
-
-    @staticmethod
-    def write(file_name: str, lines: list):
-        with open(file_name, "w") as file:
-            file.writelines(lines)
 
 
 if __name__ == "__main__":
@@ -90,8 +98,8 @@ if __name__ == "__main__":
                 open_mod.output_lines.append(result)
     assert fmod.has_committable_change() is False
 
-    fmod = FileModifier("file_mod_tst.txt", [LineParser(lambda l: l.startswith("some"),
-                                                        lambda _: "some_missing_change")])
+    fmod = FileModifier("file_mod_tst.txt", LineParser(lambda l: l.startswith("some"),
+                                                       lambda _: "some_missing_change"))
     open_mod = fmod.read_lines_and_trim_parsers()
     for line in open_mod.input_lines:
         open_mod.output_lines.append(line)
@@ -101,7 +109,7 @@ if __name__ == "__main__":
                 open_mod.output_lines.append(result)
     assert fmod.has_committable_change() is True
 
-    fmod = FileModifier("file_mod_tst.txt", [LineParser(lambda l: l.startswith("some"),
-                                                        lambda _: "some_missing_change")])
+    fmod = FileModifier("file_mod_tst.txt", LineParser(lambda l: l.startswith("some"),
+                                                       lambda _: "some_missing_change"))
 
     assert fmod.has_committable_change() is False
