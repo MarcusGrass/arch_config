@@ -84,7 +84,7 @@ def update_crypttab(uuids: DevUuids, home_key_file: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Takes lsblk output and configures crypto")
     parser.add_argument("-in", dest="lsblk", type=str)
-    parser.add_argument("-ckf", dest="croot_key_file", type=str)
+    parser.add_argument("-ckf", dest="root_key_file", type=str)
     parser.add_argument("-hkf", dest="home_key_file", type=str)
     args = parser.parse_args()
     lsblk = args.lsblk
