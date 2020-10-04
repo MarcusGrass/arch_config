@@ -58,6 +58,8 @@ sudo pacman -S jdk11-openjdk --noconfirm
 sudo pacman -S openjdk11-src --noconfirm
 sudo pacman -S jdk8-openjdk --noconfirm
 sudo pacman -S openjdk8-src --noconfirm
+# ...
+sudo pacman -S subversion --noconfirm
 
 #Python
 sudo pacman -S python3 --noconfirm
