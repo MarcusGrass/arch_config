@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Optional
 from dataclasses import dataclass
 
 
@@ -8,7 +8,7 @@ class LineParser:
     replacer: Callable
     with_newline: bool = True
 
-    def generate_replacement(self, line: str) -> str:
+    def generate_replacement(self, line: str) -> Optional[str]:
         if self.match(line):
             after = self.replacer(line)
             if self.with_newline:
