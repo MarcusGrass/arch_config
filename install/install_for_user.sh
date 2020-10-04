@@ -101,9 +101,16 @@ mkdir ~/documents
 mkdir ~/downloads/
 mkdir ~/misc
 
-# Xorg conf
+# User settings conf
 cp -r ~/code/arch_config/.xmonad ~/.xmonad
+chmod 600 ~/.xmonad/*
+chmod 700 ~/.xmonad
 cp -r ~/code/arch_config/.gnupg ~/.gnupg
+chmod 600 ~/.gnupg/*
+chmod 700 ~/.gnupg
+cp -r ~/code/arch_config/.ssh ~/.ssh
+chmod 600 ~/.ssh/*
+chmod 700 ~/.ssh
 cp ~/code/arch_config/.xinitrc ~/.xinitrc
 cp ~/code/arch_config/.Xresources ~/.Xresources
 cp ~/code/arch_config/.xscreensaver ~/.xscreensaver
