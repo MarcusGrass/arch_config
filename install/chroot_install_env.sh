@@ -25,13 +25,8 @@ echo "::1          localhost" >> /etc/hosts
 
 
 locale-gen
-echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 echo "sv_SE.UTF-8 UTF-8" >> /etc/locale.gen
 echo "LANG=sv_SE.UTF-8" > /etc/locale.conf
-
-KEYS="se-latin1"
-loadkeys $KEYS
-echo "KEYMAP=$KEYS" > /etc/vconsole.conf
 
 # set timezone
 ln -s /usr/share/zoneinfo/Europe/Stockholm /etc/localtime
