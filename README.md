@@ -1,5 +1,5 @@
 ## Instructions
-# ps. I take no responsibility if you use this and brick you machine or end up with issues
+# ps. I take no responsibility if you use this and brick your machine or end up with issues.
 
 Good place to start for formatting disks and getting the os installed with bios https://www.ostechnix.com/install-arch-linux-latest-version/
 
