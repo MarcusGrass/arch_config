@@ -106,7 +106,8 @@ cp ~/code/arch_config/.bashrc ~/.bashrc
 cp ~/code/arch_config/.xmobarrc ~/.xmobarrc
 
 # Prepare bluetooth
-sudo python3 ~/code/arch_config/pythonmiscscripts/update_bt_conf.py
+cd ~/code/arch_config
+sudo python3 -m pythonmiscscripts.update_bt_conf
 
 # Start services
 echo "Enabling services now"

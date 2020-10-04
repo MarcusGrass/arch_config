@@ -43,8 +43,7 @@ class FileModifier(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_tb is None:
             if self.has_committable_change():
-                print("Updating file %s, line diff=%s" % (self.file_name, len(line) - len(self.modified)), flush=True)
-                FileModifier.write(self.file_name, self.modified)
+                print("Updating file %s, line diff=%s" % (self.file_name, len(self.input_lines) - len(self.modified)), flush=True)
             else:
                 print("Change already present in %s, will not write" % self.file_name, flush=True)
 
