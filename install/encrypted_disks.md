@@ -30,10 +30,22 @@ genfstab -U -p /mnt >> /mnt/etc/fstab
 pacstrap /mnt base base-devel linux linux-firmware  
 arch-chroot /mnt
 
-pacman -S grub  
-pacman -S efibootmgr  
-pacman -S lvm2  
+if using intel run below to avoid boot issues  
+pacman -S intel-ucode
 
+//1. with scripts  
+pacman -S gi  
+mkdir /home/setup  
+cd /home/setup  
+git clone https://github.com/MarcusGrass/arch_config.git  
+cd arch_config    
+chmod +x install/chroot_encrypted_disks.sh  
+./install/chroot_encrypted_disks.sh  
+//2 manual  
+pacman -S grub    
+pacman -S efibootmgr    
+pacman -S lvm2    
+  
 
 -- now set up post boot auto decryption, no need for swap --  
 dd bs=512 count=4 if=/dev/random of=/root/croot.keyfile iflag=fullblock  

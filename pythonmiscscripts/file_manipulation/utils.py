@@ -6,10 +6,15 @@ from dataclasses import dataclass
 class LineParser:
     match: Callable
     replacer: Callable
+    with_newline: bool = True
 
-    def generate_replacement(self, line: str):
+    def generate_replacement(self, line: str) -> str:
         if self.match(line):
-            return self.replacer(line) + "\n"
+            after = self.replacer(line)
+            if self.with_newline:
+                return after + "\n"
+            else:
+                return after
         else:
             return None
 

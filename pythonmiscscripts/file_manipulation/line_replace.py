@@ -1,12 +1,13 @@
 from pythonmiscscripts.file_manipulation.utils import LineParser, FileModifier, OpenFileModification
 
 
-def replace_on_match(file_name: str, line_replacers: [LineParser]):
+def replace_on_match(file_name: str, line_replacers: [LineParser]) -> bool:
     with FileModifier(file_name, line_replacers) as f:
-        modify(f)
+        return modify(f)
 
 
-def modify(f: OpenFileModification):
+def modify(f: OpenFileModification) -> bool:
+    modified = True
     for line in f.input_lines:
         any_match = False
         for line_replacer in f.parsers:
@@ -14,8 +15,10 @@ def modify(f: OpenFileModification):
             if result is not None:
                 f.output_lines.append(result)
                 any_match = True
+                modified = True
         if not any_match:
             f.output_lines.append(line)
+    return modified
 
 
 if __name__ == "__main__":

@@ -1,18 +1,21 @@
 from pythonmiscscripts.file_manipulation.utils import LineParser, FileModifier, OpenFileModification
 
 
-def insert_after_match(file_name: str, next_line_appenders: [LineParser]):
+def insert_after_match(file_name: str, next_line_appenders: [LineParser]) -> bool:
     with FileModifier(file_name, next_line_appenders) as f:
-        modify(f)
+        return modify(f)
 
 
-def modify(f: OpenFileModification):
+def modify(f: OpenFileModification) -> bool:
+    success = False
     for line in f.input_lines:
         f.output_lines.append(line)
         for line_replacer in f.parsers:
             result = line_replacer.generate_replacement(line)
             if result is not None:
+                success = True
                 f.output_lines.append(result)
+    return success
 
 
 if __name__ == "__main__":
