@@ -85,6 +85,9 @@ sudo pacman -S pass --noconfirm
 # Email
 sudo pacman -S evolution --noconfirm
 sudo pacman -S evolution-ews --noconfirm
+# Email, uses gnome-keyring for peristing pw
+sudo pacman -S gnome-keyring --noconfirm
+
 
 # Cron
 sudo pacman -S cronie --noconfirm
