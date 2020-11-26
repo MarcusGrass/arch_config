@@ -94,10 +94,10 @@ if __name__ == "__main__":
     home_key = args.home_key_file
     root_key = args.root_key_file
     rp = args.rp
-    hp = args.sp
-    sp = args.hp
+    sp = args.sp
+    hp = args.hp
 
-    if lsblk is None or home_key is None or root_key is None or rp is None or hp is None or sp:
+    if lsblk is None or home_key is None or root_key is None or rp is None or hp is None or sp is None:
         print("Missing arguments expected -in, -ckf, -hkf, -rp, -sp, and -hp")
         exit(-1)
     parsed_uuids = get_uuids(root_part=rp, swap_part=sp, home_part=hp, lsblk_output=lsblk)

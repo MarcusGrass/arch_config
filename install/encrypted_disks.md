@@ -18,16 +18,15 @@ mkfs.ext4 /dev/mapper/croot
 mkfs.ext4 /dev/mapper/home
 mkswap /dev/sda4  
 
+mount /dev/mapper/croot /mnt  
 mkdir /mnt/home  
 mkdir /mnt/efi  
-mount /dev/mapper/croot /mnt  
 mount /dev/mapper/home /mnt/home  
 mount /dev/sda2 /mnt/efi  
 swapon /dev/sda4
 
-genfstab -U -p /mnt >> /mnt/etc/fstab
-
 pacstrap /mnt base base-devel linux linux-firmware  
+genfstab -U -p /mnt >> /mnt/etc/fstab
 arch-chroot /mnt
 
 if using intel run below to avoid boot issues  
