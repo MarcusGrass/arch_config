@@ -14,16 +14,16 @@ class DevUuids:
     swap: str
 
 
-def get_uuids(lsblk_output: str) -> DevUuids:
+def get_uuids(root_part, swap_part, home_part, lsblk_output: str) -> DevUuids:
     root = None
     home = None
     swap = None
     for line in lsblk_output.split("\n"):
-        if line.startswith("|-sda3") and "crypto_LUKS" in line:
+        if line.startswith("|-%s" % root_part) and "crypto_LUKS" in line:
             root = parse_uuid(line)
-        elif line.startswith("|-sda4") and "swap" in line:
+        elif line.startswith("|-%s" % swap_part) and "swap" in line:
             swap = parse_uuid(line)
-        elif line.startswith("`-sda5") and "crypto_LUKS" in line:
+        elif line.startswith("`-%s" % home_part) and "crypto_LUKS" in line:
             home = parse_uuid(line)
     if root is None or swap is None or home is None:
         raise Exception("Failed to parse lsblk no match, root=%s, home=%s, swap=%s" % (root, home, swap))
@@ -86,14 +86,21 @@ if __name__ == "__main__":
     parser.add_argument("-in", dest="lsblk", type=str)
     parser.add_argument("-ckf", dest="root_key_file", type=str)
     parser.add_argument("-hkf", dest="home_key_file", type=str)
+    parser.add_argument("-rp", dest="rp", type=str)
+    parser.add_argument("-sp", dest="sp", type=str)
+    parser.add_argument("-hp", dest="sp", type=str)
     args = parser.parse_args()
     lsblk = args.lsblk
     home_key = args.home_key_file
     root_key = args.root_key_file
-    if lsblk is None or home_key is None or root_key is None:
-        print("Missing arguments expected -in, -ckf, and -hkf")
+    rp = args.rp
+    hp = args.sp
+    sp = args.hp
+
+    if lsblk is None or home_key is None or root_key is None or rp is None or hp is None or sp:
+        print("Missing arguments expected -in, -ckf, -hkf, -rp, -sp, and -hp")
         exit(-1)
-    parsed_uuids = get_uuids(lsblk_output=lsblk)
+    parsed_uuids = get_uuids(root_part=rp, swap_part=sp, home_part=hp, lsblk_output=lsblk)
     update_default_grub(parsed_uuids.root, root_key)
     update_mkinitcpio(root_key)
     update_crypttab(parsed_uuids, home_key)
