@@ -88,7 +88,7 @@ if __name__ == "__main__":
     parser.add_argument("-hkf", dest="home_key_file", type=str)
     parser.add_argument("-rp", dest="rp", type=str)
     parser.add_argument("-sp", dest="sp", type=str)
-    parser.add_argument("-hp", dest="sp", type=str)
+    parser.add_argument("-hp", dest="hp", type=str)
     args = parser.parse_args()
     lsblk = args.lsblk
     home_key = args.home_key_file
