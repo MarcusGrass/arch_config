@@ -45,6 +45,10 @@ sudo pacman -S xmonad --noconfirm
 sudo pacman -S xmonad-contrib --noconfirm
 sudo pacman -S xmobar --noconfirm
 
+# install urxvt and bg tools
+sudo pacman -S rxvt-unicode --noconfirm
+sudo pacman -S feh --noconfirm
+
 # Bluetooth and sound
 sudo pacman -S pulseaudio --noconfirm
 sudo pacman -S pavucontrol --noconfirm
@@ -95,6 +99,7 @@ sudo pacman -S cronie --noconfirm
 
 # Create directory structure
 mkdir -p ~/pictures/screenshots
+mkdir ~/pictures/wps
 mkdir ~/code/java
 mkdir ~/code/python
 mkdir ~/code/bash
@@ -103,6 +108,11 @@ mkdir ~/code/unclassified
 mkdir ~/documents
 mkdir ~/downloads/
 mkdir ~/misc
+mkdir ~/misc/screensavers
+
+# Make screensaver work
+cp ~/code/arch_config/static/wpbg.jpg ~/misc/screensavers
+cp ~/code/arch_config/static/wpbg.jpg ~/pictures/wps
 
 # User settings conf
 cp -r ~/code/arch_config/.xmonad ~/.xmonad

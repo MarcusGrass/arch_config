@@ -18,16 +18,14 @@ case $i in
 esac
 done
 
-
 echo "$HOST_NAME" > /etc/hostname
 echo "127.0.0.1    localhost" >> /etc/hosts
 echo "::1          localhost" >> /etc/hosts
 
 
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
 locale-gen
-echo "sv_SE.UTF-8 UTF-8" >> /etc/locale.gen
-echo "LANG=sv_SE.UTF-8" > /etc/locale.conf
-
 # set timezone
 ln -s /usr/share/zoneinfo/Europe/Stockholm /etc/localtime
 timedatectl set-timezone Europe/Stockholm
@@ -39,8 +37,6 @@ passwd
 # make wifi/network work respectively
 pacman -S iwd
 pacman -S dhcpcd
-
-
 
 # Create user
 echo "Creating user $USER"

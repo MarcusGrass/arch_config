@@ -3,3 +3,11 @@ XTerm*background: Black
 XTerm*cursorColor: LightBlue
 XTerm*pointerShape: arrow
 XTerm*pointerColor: Blue
+XTerm*faceName: Source Code Pro Medium
+XTerm*faceSize: 11
+XTerm*renderFont: true
+URxvt.font: xft:Source Code Pro Medium:size=11
+urxvt*transparent: true
+urxvt*shading: 80
+URxvt*foreground: Green
+URxvt.scrollBar: false

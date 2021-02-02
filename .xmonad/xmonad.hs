@@ -22,7 +22,7 @@ main = do
     , handleEventHook = handleEventHook defaultConfig <+> docksEventHook
     }
 
-myTerminal    = "xterm"
+myTerminal    = "urxvt"
 myModMask     = mod4Mask
 myBorderWidth = 1
 myWorkspaces  = ["1:code", "2:comm", "3:web", "4:admin1", "5:admin2", "6", "7", "8", "9", "0"]

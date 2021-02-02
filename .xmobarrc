@@ -11,7 +11,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%multicpu% | %memory% | %dynnetwork% }{ %ESSA% | %date% || %kbd% "
+   , template = "%multicpu% | %memory% | %dynnetwork% | %battery% }{ %ESSA% | %date% || %kbd% "
 
    -- general behavior
    , lowerOnStart =     False    -- send to bottom of window stack on start
@@ -38,7 +38,7 @@ Config {
    , commands = 
 
         -- weather monitor
-        [ Run Weather "ESSA" [ "--template", "<skyCondition> | <fc=#4682B4><tempC></fc>°C | <fc=#4682B4><rh></fc>% | <fc=#4682B4><pressure></fc>hPa"
+        [ Run Weather "ESSA" [ "--template", "<skyCondition> | <fc=#4682B4><tempC></fc>C | <fc=#4682B4><rh></fc>% | <fc=#4682B4><pressure></fc>hPa"
                              ] 36000
 
         -- network activity monitor (dynamic interface resolution)
@@ -68,6 +68,22 @@ Config {
                              , "--high"     , "darkred"
                              ] 10
 
+        -- battery
+		, Run Battery       [ "--template" , "Batt: <acstatus>"
+                                     , "--Low"      , "10"        -- units: %
+                                     , "--High"     , "80"        -- units: %
+                                     , "--low"      , "red"
+                                     , "--normal"   , "orange"
+                                     , "--high"     , "green"
+
+                                     , "--" -- battery specific options
+                                               -- discharging status
+                                               , "-o"   , "<left>% (<timeleft>)"
+                                               -- AC "on" status
+                                               , "-O"   , "<fc=orange>Charging</fc>" -- dAA520
+                                               -- charged status
+                                               , "-i"   , "<fc=green>Charged</fc>" -- #006000
+                                     ] 50
         -- time and date indicator 
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
         , Run Date           "<fc=#ABABAB>%F (%a) %T</fc>" "date" 10
