@@ -34,17 +34,18 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 setxkbmap se
-twm &
-xclock -geometry 50x50-1+1 &
+# twm&
+# xclock -geometry 50x50-1+1&
 # xrandr monitor setup
-xrandr --output DVI-I-2-2 --primary --auto --output DP-2-5 --auto --above DVI-I-2-2 --output DVI-I-1 --auto --right-of DVI-I-2-2 --output DP-4 --auto --left-of DVI-I-2-2
-google-chrome-stable&
-intellij-idea-ultimate-edition&
-slack&
-evolution&
-spotify&
-zoom&
-pavucontrol&
+# evolution&
+autorandr column
+# google-chrome-stable&
+# intellij-idea-ultimate-edition&
+# slack&
+# spotify&
+# zoom&
+# pavucontrol&
 xscreensaver&
-xmobar&
+feh --bg-fill $HOME/pictures/wps/wpbg.jpg
 exec xmonad
+

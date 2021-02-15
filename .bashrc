@@ -7,6 +7,7 @@
 
 export VISUAL=vim
 export EDITOR="$VISUAL"
+export TERM=xterm-256color
 shopt -s cdspell
 # System
 alias off='shutdown -h now'
@@ -15,6 +16,10 @@ alias off='shutdown -h now'
 alias ls='ls --color=auto'
 alias endx='python /home/gramar/code/arch_config/pythonmiscscripts/kill_x.py'
 alias lock='xscreensaver-command -lock'
+alias xrec='xmonad --recompile'
+alias xedit='vim ~/.xmonad/xmonad.hs'
+alias xmore='xmonad --recompile && xmonad --restart'
+alias syu='sudo pacman -Syu && xmonad --recompile'
 # alias ssh='. code/arch_config/bash/ssh.sh'
 alias ss='maim -s -u | xclip -selection clipboard -t image/png -i'
 alias sstatus='sudo systemctl status'

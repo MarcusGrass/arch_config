@@ -2,10 +2,10 @@
 # Written by xscreensaver-demo 5.43 for gramar on Mon Feb 24 13:49:44 2020.
 # https://www.jwz.org/xscreensaver/
 
-timeout:	0:10:00
+timeout:	0:20:00
 cycle:		0:00:00
 lock:		True
-lockTimeout:	0:05:00
+lockTimeout:	0:15:00
 passwdTimeout:	0:00:30
 visualID:	default
 installColormap:    True
