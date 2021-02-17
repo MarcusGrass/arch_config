@@ -1,11 +1,11 @@
 import XMonad
 import System.IO
-import XMonad.Actions.SpawnOn
 import XMonad.Actions.GroupNavigation
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.InsertPosition
+import XMonad.Hooks.RefocusLast
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.SpawnOnce
 import XMonad.Layout.Tabbed
@@ -24,8 +24,9 @@ main = do
         , layoutHook  = myLayoutHook
         , manageHook  = insertPosition End Newer <+> myManageHook
         , startupHook = myStartupHook
-        , handleEventHook = handleEventHook defaultConfig <+> docksEventHook
-        }
+        , logHook     = refocusLastLogHook
+        , handleEventHook = refocusLastWhen myFocusPredicate <+> handleEventHook defaultConfig <+> docksEventHook
+        } where myFocusPredicate = refocusingIsActive <||> isFloat
 
 myTerminal    = "urxvt"
 myModMask     = mod4Mask
@@ -51,8 +52,8 @@ myStartupHook = do
     spawnOnce "pavucontrol"
     spawnOnce "google-chrome-stable"
 myManageHook  = composeAll
-    [ isFullscreen --> doFullFloat
-    , className =? "Google-chrome"                           --> doShift "3:web"
+    [ 
+    className =? "Google-chrome"                           --> doShift "3:web"
     , className =? "jetbrains-idea"                          --> doShift "1:code"
     , className =? "Evolution"                               --> doShift "3:web"
     , className =? "Slack"                                   --> doShift "4:admin1"
