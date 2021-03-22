@@ -8,8 +8,10 @@ import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.RefocusLast
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.SpawnOnce
+import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Layout.Tabbed
 import XMonad.Layout.NoBorders
+import XMonad.Layout.TrackFloating -- Don't go to last tab when floating pops up
 
 import qualified Data.Map as M
 
@@ -26,7 +28,7 @@ main = do
         , startupHook = myStartupHook
         , logHook     = refocusLastLogHook
         , handleEventHook = refocusLastWhen myFocusPredicate <+> handleEventHook defaultConfig <+> docksEventHook
-        } where myFocusPredicate = refocusingIsActive <||> isFloat
+        } `additionalKeys` myKeys
 
 myTerminal    = "urxvt"
 myModMask     = mod4Mask
@@ -40,7 +42,8 @@ myTabConfig = def { activeColor = "#0d0d0d"
                   , inactiveTextColor = "#15ff00"
                   , fontName = "xft:Source Code Pro Medium:size=10:antialias=true"
                   }
-myLayoutHook  = avoidStruts $ noBorders(tabbed shrinkText myTabConfig) ||| layoutHook defaultConfig
+myLayoutHook  = avoidStruts $ trackFloating(noBorders(tabbed shrinkText myTabConfig)) ||| layoutHook defaultConfig
+myFocusPredicate = refocusingIsActive <||> isFloat  -- Return to last tab after closing floating, is definitely necessary combined with trackFloating, I checked
 myStartupHook = do
     setWMName "LG3D"
     spawnOnce "xmobar"
@@ -53,7 +56,8 @@ myStartupHook = do
     spawnOnce "google-chrome-stable"
 myManageHook  = composeAll
     [ 
-    className =? "Google-chrome"                           --> doShift "3:web"
+    isFullscreen --> doFullFloat
+    , className =? "Google-chrome"                           --> doShift "3:web"
     , className =? "jetbrains-idea"                          --> doShift "1:code"
     , className =? "Evolution"                               --> doShift "3:web"
     , className =? "Slack"                                   --> doShift "4:admin1"
@@ -61,5 +65,9 @@ myManageHook  = composeAll
     , className =? "zoom"                                    --> doShift "7"
     , className =? "Pavucontrol"                             --> doShift "7"
     , manageDocks
+    ]
+myKeys = 
+    [ ((0, xK_Print), spawn "maim -s -u | xclip -selection clipboard -t image/png -i") -- 0 means no extra modifier key needs to be pressed in this case.
+    , ((myModMask, xK_d), spawn "dmenu_run -i -p \"Run: \"")
     ]
 
