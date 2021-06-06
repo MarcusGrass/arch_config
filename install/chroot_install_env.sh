@@ -44,3 +44,6 @@ pacman -S sudo --noconfirm
 useradd -m "$USER"
 passwd "$USER"
 echo "$USER    ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+systemctl --now enable systemd-networkd systemd-resolved iwd
+systemctl --now enable dhcpcd
