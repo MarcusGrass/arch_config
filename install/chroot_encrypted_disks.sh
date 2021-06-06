@@ -2,22 +2,22 @@
 
 if [ -z "$1" ]
   then
-    echo "First argument missing, should be device name /dev/<name>"
+    echo "First argument missing, should be device name /dev/<name> ex: sda"
     exit 1
 fi
 if [ -z "$2" ]
   then
-    echo "Second argument missing, should be root part /dev/<part_name>"
+    echo "Second argument missing, should be root part /dev/<part_name> ex: sda3"
     exit 1
 fi
 if [ -z "$3" ]
   then
-    echo "Third argument missing, should be swap part /dev/<swap_name>"
+    echo "Third argument missing, should be swap part /dev/<swap_name> ex: sda4"
     exit 1
 fi
 if [ -z "$4" ]
   then
-    echo "Fourth argument missing, should be home part /dev/<part_name>"
+    echo "Fourth argument missing, should be home part /dev/<part_name> ex: sda5"
     exit 1
 fi
 # Add boot deps
@@ -26,14 +26,18 @@ pacman -S efibootmgr --noconfirm
 pacman -S python3 --noconfirm
 
 ROOT_KEY="/root/croot.keyfile"
-if [ -f "$ROOT_KEY" ]; then
+if [ ! -f "$ROOT_KEY" ];
+then
+  touch $ROOT_KEY
   dd bs=512 count=4 if=/dev/random of=$ROOT_KEY iflag=fullblock
   chmod 000 $ROOT_KEY
   cryptsetup -v luksAddKey /dev/"$2" $ROOT_KEY
 fi
 
 HOME_KEY="/etc/cryptsetup-keys.d/home.key"
-if [ -f "$HOME_KEY" ]; then
+if [ ! -f "$HOME_KEY" ]; then
+  mkdir /etc/cryptsetp-keys.d
+  touch $HOME_KEY
   dd bs=512 count=4 if=/dev/random of=$HOME_KEY iflag=fullblock
   chmod 000 $HOME_KEY
   cryptsetup -v luksAddKey /dev/"$4" $HOME_KEY
