@@ -34,9 +34,10 @@ then
   cryptsetup -v luksAddKey /dev/"$2" $ROOT_KEY
 fi
 
-HOME_KEY="/etc/cryptsetup-keys.d/home.key"
+HOME_KEY_DIR="/etc/cryptsetup-keys.d"
+HOME_KEY="$HOME_KEY_DIR/home.key"
 if [ ! -f "$HOME_KEY" ]; then
-  mkdir /etc/cryptsetp-keys.d
+  mkdir HOME_KEY_DIR
   touch $HOME_KEY
   dd bs=512 count=4 if=/dev/random of=$HOME_KEY iflag=fullblock
   chmod 000 $HOME_KEY
