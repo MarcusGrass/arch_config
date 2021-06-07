@@ -38,12 +38,14 @@ echo "Add the key from ~/.ssh/id_rsa to github to finish git install"
 sudo pacman -S xorg-server --noconfirm
 sudo pacman -S xorg-xinit --noconfirm
 sudo pacman -S xterm --noconfirm
-sudo pacman -S xrandr --noconfirm
+sudo pacman -S xorg-xrandr --noconfirm
+sudo pacman -S autorandr --noconfirm
 sudo pacman -S xscreensaver --noconfirm
 
 sudo pacman -S xmonad --noconfirm
 sudo pacman -S xmonad-contrib --noconfirm
 sudo pacman -S xmobar --noconfirm
+sudo pacman -S dmenu --noconfirm
 
 # install urxvt and bg tools
 sudo pacman -S rxvt-unicode --noconfirm
@@ -55,13 +57,14 @@ sudo pacman -S pavucontrol --noconfirm
 sudo pacman -S pulseaudio-bluetooth --noconfirm
 sudo pacman -S pulsemixer --noconfirm
 sudo pacman -S bluez --noconfirm
-sudo pacman -S bluez-utils--noconfirm
+sudo pacman -S bluez-utils --noconfirm
 
 # Java
 sudo pacman -S jdk11-openjdk --noconfirm
 sudo pacman -S openjdk11-src --noconfirm
 sudo pacman -S jdk8-openjdk --noconfirm
 sudo pacman -S openjdk8-src --noconfirm
+sudo pacman -S maven --noconfirm
 # ...
 sudo pacman -S subversion --noconfirm
 
