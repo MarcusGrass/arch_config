@@ -71,26 +71,27 @@ Config {
         -- battery
 		, Run Battery       [ "--template" , "Batt: <acstatus>"
                                      , "--Low"      , "10"        -- units: %
-                                     , "--High"     , "80"        -- units: %
+                                     , "--High"     , "70"        -- units: %
                                      , "--low"      , "red"
-                                     , "--normal"   , "orange"
-                                     , "--high"     , "green"
+                                     , "--normal"   , "green"
+                                     , "--high"     , "orange"
 
                                      , "--" -- battery specific options
                                                -- discharging status
                                                , "-o"   , "<left>% (<timeleft>)"
                                                -- AC "on" status
-                                               , "-O"   , "<fc=orange>Charging</fc>" -- dAA520
+                                               , "-O"   , "Charging: <left>% (<timeleft>)" -- dAA520
                                                -- charged status
-                                               , "-i"   , "<fc=green>Charged</fc>" -- #006000
+                                               , "-i"   , "Charged" -- #006000
                                      ] 50
         -- time and date indicator 
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
         , Run Date           "<fc=#ABABAB>%F (%a) %T</fc>" "date" 10
 
         -- keyboard layout indicator
-        , Run Kbd            [ ("us(dvorak)" , "<fc=#00008B>DV</fc>")
+        , Run Kbd            [ ("se"         , "<fc=#8B0000>SE</fc>")
                              , ("us"         , "<fc=#8B0000>US</fc>")
+                             , ("us(dvorak)" , "<fc=#00008B>DV</fc>")
                              ]
         ]
    }
