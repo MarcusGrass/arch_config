@@ -4,14 +4,16 @@ import XMonad.Actions.GroupNavigation
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
-import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.RefocusLast
+import XMonad.Hooks.InsertPosition
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.SpawnOnce
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Layout.Tabbed
 import XMonad.Layout.NoBorders
 import XMonad.Layout.TrackFloating -- Don't go to last tab when floating pops up
+import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.Place
 
 import qualified Data.Map as M
 
@@ -54,7 +56,8 @@ myStartupHook = do
     spawnOnce "zoom"
     spawnOnce "pavucontrol"
     spawnOnce "google-chrome-stable"
-myManageHook  = composeAll
+myPlacement = withGaps (16,0,16,0) (smart (0.5,0.5)) -- "simpleSmart" is fine too places top-left and down instead of center
+myManageHook  = placeHook myPlacement <+> composeAll
     [ 
     isFullscreen --> doFullFloat
     , className =? "Google-chrome"                           --> doShift "3:web"

@@ -17,6 +17,7 @@ sudo pacman -S gvim --noconfirm
 sudo pacman -S bash-completion --noconfirm
 sudo pacman -S openssl --noconfirm
 sudo pacman -S openssh --noconfirm
+sudo pacman -S gnupg --noconfirm
 
 # Gonna need this sooner or later...
 sudo pacman -S linux-headers --noconfirm
@@ -65,15 +66,20 @@ sudo pacman -S openjdk11-src --noconfirm
 sudo pacman -S jdk8-openjdk --noconfirm
 sudo pacman -S openjdk8-src --noconfirm
 sudo pacman -S maven --noconfirm
+
 # ...
 sudo pacman -S subversion --noconfirm
 
-#Python
+# Python
 sudo pacman -S python3 --noconfirm
 
 # Rust
 sudo pacman -S rustup --noconfirm
 rustup toolchain install stable
+
+# JS
+sudo pacman -S nodejs --noconfirm
+sudo pacman -S npm --noconfirm
 
 # Docker
 sudo pacman -S docker --noconfirm
@@ -98,6 +104,9 @@ sudo pacman -S gnome-keyring --noconfirm
 
 # Cron
 sudo pacman -S cronie --noconfirm
+
+# Db tool
+sudo pacman -S dbeaver --noconfirm
 
 
 # Create directory structure
