@@ -47,6 +47,10 @@ sudo pacman -S xmonad --noconfirm
 sudo pacman -S xmonad-contrib --noconfirm
 sudo pacman -S xmobar --noconfirm
 sudo pacman -S dmenu --noconfirm
+# Enables desktop notifications
+sudo pacman -S dunst --noconfirm
+# Icons for notifications
+sudo pacman -S papirus-icon-theme --noconfirm
 
 # install urxvt and bg tools
 sudo pacman -S rxvt-unicode --noconfirm
@@ -136,11 +140,16 @@ chmod 700 ~/.gnupg
 cp -r ~/code/arch_config/.ssh ~/.ssh
 chmod 600 ~/.ssh/*
 chmod 700 ~/.ssh
+cp -r ~/code/arch_config/.config ~/.config
+chmod 600 ~/.config/*
+chmod 700 ~/.config
 cp ~/code/arch_config/.xinitrc ~/.xinitrc
 cp ~/code/arch_config/.Xresources ~/.Xresources
 cp ~/code/arch_config/.xscreensaver ~/.xscreensaver
 cp ~/code/arch_config/.bashrc ~/.bashrc
 cp ~/code/arch_config/.xmobarrc ~/.xmobarrc
+cp ~/code/arch_config/.ideavimrc ~/.ideavimrc
+cp ~/code/arch_config/.vimrc ~/.vimrc
 
 # Prepare bluetooth
 cd ~/code/arch_config && sudo python3 -m pythonmiscscripts.update_bt_conf
