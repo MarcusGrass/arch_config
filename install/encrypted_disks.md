@@ -1,10 +1,10 @@
 ## Encrypted disks with luks (password on boot)  
 Partitioning (using cfdisk)  
-BIOS 1G  /dev/sda1  
-EFI > 512M 600 is fine  /dev/sda2  
-ROOT ~ 10% Of total, at least 30G  /dev/sda3  
-SWAP = 2*RAM  /dev/sda4  
-HOME = remaining  /dev/sda5  
+BIOS 1G  /dev/sda1 (label BIOS BOOT)  
+EFI > 512M 600 is fine  /dev/sda2 (label EFI SYSTEM)  
+ROOT ~ 10% Of total, at least 30G  /dev/sda3 (label Linux swap)  
+SWAP = 2*RAM  /dev/sda4 (label Linux filesystem)  
+HOME = remaining  /dev/sda5 (label Linux filesystem)    
 
 Grub does not recognize luks2 yet as of this time.
 cryptsetup -y -v luksFormat /dev/sda3 --type luks1  
