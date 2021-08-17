@@ -35,9 +35,9 @@ then
 fi
 
 HOME_KEY_DIR="/etc/cryptsetup-keys.d"
+mkdir $HOME_KEY_DIR
 HOME_KEY="$HOME_KEY_DIR/home.key"
 if [ ! -f "$HOME_KEY" ]; then
-  mkdir HOME_KEY_DIR
   touch $HOME_KEY
   dd bs=512 count=4 if=/dev/random of=$HOME_KEY iflag=fullblock
   chmod 000 $HOME_KEY

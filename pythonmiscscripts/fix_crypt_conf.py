@@ -19,11 +19,11 @@ def get_uuids(root_part, swap_part, home_part, lsblk_output: str) -> DevUuids:
     home = None
     swap = None
     for line in lsblk_output.split("\n"):
-        if line.startswith("|-%s" % root_part) and "crypto_LUKS" in line:
+        if root_part in line and "crypto_LUKS" in line:
             root = parse_uuid(line)
-        elif line.startswith("|-%s" % swap_part) and "swap" in line:
+        elif swap_part in line and "swap" in line:
             swap = parse_uuid(line)
-        elif line.startswith("`-%s" % home_part) and "crypto_LUKS" in line:
+        elif home_part in line and "crypto_LUKS" in line:
             home = parse_uuid(line)
     if root is None or swap is None or home is None:
         raise Exception("Failed to parse lsblk no match, root=%s, home=%s, swap=%s" % (root, home, swap))
