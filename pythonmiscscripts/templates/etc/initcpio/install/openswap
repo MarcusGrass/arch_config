@@ -1,0 +1,10 @@
+build ()
+{
+    add_runscript
+}
+help ()
+{
+cat<<HELPEOF
+  This opens the swap encrypted partition /dev/{{%SWAP_PART%}} in /dev/mapper/cswap
+HELPEOF
+}

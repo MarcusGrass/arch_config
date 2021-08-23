@@ -14,6 +14,7 @@ shopt -s cdspell
 alias off='shutdown -h now'
 
 # Convenience
+alias pacman='sudo pacman'
 alias ls='ls --color=auto'
 alias endx='python /home/gramar/code/arch_config/pythonmiscscripts/kill_x.py'
 alias lock='xscreensaver-command -lock'

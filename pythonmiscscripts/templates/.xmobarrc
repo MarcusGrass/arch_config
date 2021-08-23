@@ -1,4 +1,4 @@
-Config { 
+Config {
 
    -- appearance
      font =         "xft:Bitstream Vera Sans Mono:size=9:bold:antialias=true"
@@ -11,7 +11,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%multicpu% | %memory% | %dynnetwork% | %battery% }{ %ESSA% | %date% || %kbd% "
+   , template = "%multicpu% | %memory% | %dynnetwork%{{%BATTERY%}}}{ {{%ACTIONS%}} %ESSA% | %date% || %kbd% "
 
    -- general behavior
    , lowerOnStart =     False    -- send to bottom of window stack on start
@@ -35,7 +35,7 @@ Config {
    --   The --template option controls how the plugin is displayed. Text
    --   color can be set by enclosing in <fc></fc> tags. For more details
    --   see http://projects.haskell.org/xmobar/#system-monitor-plugins.
-   , commands = 
+   , commands =
 
         -- weather monitor
         [ Run Weather "ESSA" [ "--template", "<skyCondition> | <fc=#4682B4><tempC></fc>C | <fc=#4682B4><rh></fc>% | <fc=#4682B4><pressure></fc>hPa"
@@ -51,14 +51,14 @@ Config {
                              ] 10
 
         -- cpu activity monitor
-        , Run MultiCpu       [ "--template" , "Cpu: <total0>%|<total1>%|<total2>%|<total3>%|<total4>%|<total5>%|<total6>%|<total7>%"
+        , Run MultiCpu       [ "--template" , "{{%CPUS%}}"
                              , "--Low"      , "50"         -- units: %
                              , "--High"     , "85"         -- units: %
                              , "--low"      , "darkgreen"
                              , "--normal"   , "darkorange"
                              , "--high"     , "darkred"
                              ] 10
-                          
+
         -- memory usage monitor
         , Run Memory         [ "--template" ,"Mem: <usedratio>%"
                              , "--Low"      , "20"        -- units: %
@@ -67,24 +67,8 @@ Config {
                              , "--normal"   , "darkorange"
                              , "--high"     , "darkred"
                              ] 10
-
-        -- battery
-		, Run Battery       [ "--template" , "Batt: <acstatus>"
-                                     , "--Low"      , "10"        -- units: %
-                                     , "--High"     , "70"        -- units: %
-                                     , "--low"      , "red"
-                                     , "--normal"   , "green"
-                                     , "--high"     , "orange"
-
-                                     , "--" -- battery specific options
-                                               -- discharging status
-                                               , "-o"   , "<left>% (<timeleft>)"
-                                               -- AC "on" status
-                                               , "-O"   , "Charging: <left>% (<timeleft>)" -- dAA520
-                                               -- charged status
-                                               , "-i"   , "Charged" -- #006000
-                                     ] 50
-        -- time and date indicator 
+		{{%BATTERY_CFG%}}
+        -- time and date indicator
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
         , Run Date           "<fc=#ABABAB>%F (%a) %T</fc>" "date" 10
 

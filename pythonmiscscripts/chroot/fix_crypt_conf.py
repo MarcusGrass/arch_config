@@ -1,10 +1,14 @@
-import argparse
 import re
 from dataclasses import dataclass
-from pythonmiscscripts.file_manipulation.file_modifier import LineParser, ManipulationResult
-from pythonmiscscripts.file_manipulation.line_list_append import insert_unique_to_list
+
 from pythonmiscscripts.file_manipulation.eof_append import append_lines_to_end
+from pythonmiscscripts.file_manipulation.file_modifier import LineParser, ManipulationResult
+from pythonmiscscripts.file_manipulation.line_delete import delete_on_match
+from pythonmiscscripts.file_manipulation.line_list_append import insert_unique_to_list
 from pythonmiscscripts.file_manipulation.next_line_append import insert_after_match
+from pythonmiscscripts.globals import ROOT, SWAP, HOME, ROOT_SUFFIX, SWAP_SUFFIX, HOME_SUFFIX, CRYPT_ROOT, CRYPT_SWAP
+from pythonmiscscripts.os_io.commands import mkfile
+from pythonmiscscripts.templates.templates import to_openswap_hook, to_openswap_install
 
 
 @dataclass
@@ -14,16 +18,16 @@ class DevUuids:
     swap: str
 
 
-def get_uuids(root_part, swap_part, home_part, lsblk_output: str) -> DevUuids:
+def get_uuids(lsblk_output: str) -> DevUuids:
     root = None
     home = None
     swap = None
     for line in lsblk_output.split("\n"):
-        if root_part in line and "crypto_LUKS" in line:
+        if ROOT_SUFFIX in line and "crypto_LUKS" in line:
             root = parse_uuid(line)
-        elif swap_part in line and "swap" in line:
+        elif SWAP_SUFFIX in line and "crypto_LUKS" in line:
             swap = parse_uuid(line)
-        elif home_part in line and "crypto_LUKS" in line:
+        elif HOME_SUFFIX in line and "crypto_LUKS" in line:
             home = parse_uuid(line)
     if root is None or swap is None or home is None:
         raise Exception("Failed to parse lsblk no match, root=%s, home=%s, swap=%s" % (root, home, swap))
@@ -40,11 +44,12 @@ def update_default_grub(root_uuid: str, root_key_file: str):
     grub_default = "/etc/default/grub"
     success = append_lines_to_end(grub_default, ["GRUB_ENABLE_CRYPTODISK=y"])
     if success == ManipulationResult.NO_MATCH:
-        print("Failed to update %s, needs manual fixing" % grub_default, flush=True)
+        print("Failed to append cryptodisk to update %s, needs manual fixing" % grub_default, flush=True)
         return
 
     cmd_line = "cryptdevice=UUID=%s:croot" \
-               " root=/dev/mapper/croot cryptkey=rootfs:%s" % (root_uuid, root_key_file)
+               " root=%s cryptkey=rootfs:%s" \
+               " resume=%s" % (root_uuid, CRYPT_ROOT, root_key_file, CRYPT_SWAP)
     success = insert_unique_to_list(file_name=grub_default, items=cmd_line.split(" "),
                                     start_str="GRUB_CMDLINE_LINUX=", list_start='"', list_closure='"', list_sep=" ")
     if success == ManipulationResult.NO_MATCH:
@@ -53,10 +58,21 @@ def update_default_grub(root_uuid: str, root_key_file: str):
                                                               replacer=lambda _: linux_line))
 
     if success == ManipulationResult.NO_MATCH:
-        print("Failed to update %s, needs manual fixing" % grub_default, flush=True)
+        print("Failed to add cmdline linux update to %s, needs manual fixing" % grub_default, flush=True)
 
 
-def update_mkinitcpio(root_key_file: str):
+def update_mkinitcpio(depth: int, swap_key_file: str, root_key_file: str):
+    hooks = "/etc/initcpio/hooks/openswap"
+    install = "/etc/initcpio/install/openswap"
+    if mkfile(depth, "/etc/initcpio/hooks/openswap"):
+        content = to_openswap_hook(swap_key=swap_key_file, swap_part=SWAP_SUFFIX)
+        with open(hooks, "w") as f:
+            f.write(content)
+    if mkfile(depth, install):
+        content = to_openswap_install(swap_part=SWAP_SUFFIX)
+        with open(install, "w") as f:
+            f.write(content)
+
     mkinit = "/etc/mkinitcpio.conf"
     items = [root_key_file]
     success = insert_unique_to_list(file_name=mkinit, items=items,
@@ -65,7 +81,7 @@ def update_mkinitcpio(root_key_file: str):
         print("Failed to update %s, needs manual fixing" % mkinit, flush=True)
         return
 
-    items = ["keyboard", "keymap", "encrypt"]
+    items = ["keyboard", "fsck", "keymap", "encrypt", "openswap", "resume", "filesystems"]  # Order is important here
     success = insert_unique_to_list(file_name=mkinit, items=items,
                                     start_str="HOOKS=", list_start="(", list_closure=")", list_sep=" ")
     if success == ManipulationResult.NO_MATCH:
@@ -74,35 +90,24 @@ def update_mkinitcpio(root_key_file: str):
 
 def update_crypttab(uuids: DevUuids, home_key_file: str):
     crypttab = "/etc/crypttab"
-    swap = "swap    UUID=%s    /dev/urandom    swap,cipher=aes-cbc-essiv:sha256,size=256" % uuids.swap
     home = "home    UUID=%s    %s" % (uuids.home, home_key_file)
-    success = append_lines_to_end(crypttab, [swap, home])
+    success = append_lines_to_end(crypttab, [home])
     if success == ManipulationResult.NO_MATCH:
         print("Failed to update %s, needs manual fixing" % crypttab, flush=True)
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Takes lsblk output and configures crypto")
-    parser.add_argument("-in", dest="lsblk", type=str)
-    parser.add_argument("-ckf", dest="root_key_file", type=str)
-    parser.add_argument("-hkf", dest="home_key_file", type=str)
-    parser.add_argument("-rp", dest="rp", type=str)
-    parser.add_argument("-sp", dest="sp", type=str)
-    parser.add_argument("-hp", dest="hp", type=str)
-    args = parser.parse_args()
-    lsblk = args.lsblk
-    home_key = args.home_key_file
-    root_key = args.root_key_file
-    rp = args.rp
-    sp = args.sp
-    hp = args.hp
+def update_fstab():
+    delete_on_match("/etc/fstab", "# %s" % CRYPT_SWAP, remove=2)
+    append_lines_to_end("/etc/fstab", ["%s\tswap\tswap\tdefaults\t0 0" % CRYPT_SWAP])
 
-    if lsblk is None or home_key is None or root_key is None or rp is None or hp is None or sp is None:
-        print("Missing arguments expected -in, -ckf, -hkf, -rp, -sp, and -hp")
-        exit(-1)
-    parsed_uuids = get_uuids(root_part=rp, swap_part=sp, home_part=hp, lsblk_output=lsblk)
+
+def fix_conf(root_key: str, home_key: str, swap_key: str, lsblk: str):
+    parsed_uuids = get_uuids(lsblk_output=lsblk)
     update_default_grub(parsed_uuids.root, root_key)
-    update_mkinitcpio(root_key)
+    update_mkinitcpio(0, swap_key, root_key)
     update_crypttab(parsed_uuids, home_key)
-    # with open("lsblk_tst.txt", "r") as file:
-    #     print(get_uuids(file.read()))
+    update_fstab()
+
+
+if __name__ == "__main__":
+    pass

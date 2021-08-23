@@ -1,0 +1,15 @@
+DISK = "/dev/nvme1n1"
+BOOT = "/dev/nvme1n1p1"
+EFI = "/dev/nvme1n1p2"
+ROOT_SUFFIX = "nvme1n1p3"
+ROOT = "/dev/" + ROOT_SUFFIX
+SWAP_SUFFIX = "nvme1n1p4"
+SWAP = "/dev/" + SWAP_SUFFIX
+HOME_SUFFIX = "nvme1n1p5"
+HOME = "/dev/" + HOME_SUFFIX
+CRYPT_ROOT_SUFFIX = "croot"
+CRYPT_ROOT = "/dev/mapper/" + CRYPT_ROOT_SUFFIX
+CRYPT_SWAP_SUFFIX = "cswap"
+CRYPT_SWAP = "/dev/mapper/" + CRYPT_SWAP_SUFFIX
+HOME_ROOT_SUFFIX = "home"
+HOME_ROOT = "/dev/mapper/" + HOME_ROOT_SUFFIX

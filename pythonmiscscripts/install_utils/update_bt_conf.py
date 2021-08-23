@@ -1,7 +1,7 @@
+from pythonmiscscripts.file_manipulation.eof_append import append_lines_to_end
 from pythonmiscscripts.file_manipulation.file_modifier import LineParser
 from pythonmiscscripts.file_manipulation.line_replace import replace_on_match
 from pythonmiscscripts.file_manipulation.next_line_append import insert_after_match
-from pythonmiscscripts.file_manipulation.eof_append import append_lines_to_end
 
 """
 Should be idem

@@ -1,6 +1,6 @@
-from typing import Callable, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Callable, Optional
 
 
 class LineParser(object):
@@ -74,8 +74,11 @@ class FileModifier(object):
                 print("Change already present in %s, will not write" % self.file_name, flush=True)
 
     def read_lines_and_trim_parsers(self) -> OpenFileModification:
-        with open(self.file_name, "r") as file:
-            self.input_lines = file.readlines()
+        try:
+            with open(self.file_name, "r") as file:
+                self.input_lines = file.readlines()
+        except FileNotFoundError:
+            self.input_lines = []
         self.__remove_unneeded_parses(self.input_lines)
         return OpenFileModification(input_lines=self.input_lines, output_lines=self.modified, parsers=self.parsers)
 
@@ -97,7 +100,7 @@ class FileModifier(object):
         return self.input_lines != self.modified and len(self.modified) != 0
 
     def __write(self):
-        with open(self.file_name, "w") as file:
+        with open(self.file_name, "w+") as file:
             file.writelines(self.modified)
 
     @staticmethod
