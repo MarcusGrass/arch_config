@@ -1,0 +1,70 @@
+Config {
+
+   -- appearance
+     font            = "xft:Ubuntu:weight=bold:pixelsize=11:antialias=true:hinting=true"
+   , additionalFonts = [ "xft:Mononoki:pixelsize=11:antialias=true:hinting=true"
+                       , "xft:Font Awesome 5 Free Solid:pixelsize=12"
+                       , "xft:Font Awesome 5 Brands:pixelsize=12"
+                       ]
+   , bgColor         = "#282c34"
+   , fgColor         = "#ff6c6b"
+   , position        = TopSize L 100 24
+
+   -- general behavior
+   , lowerOnStart = True    -- send to bottom of window stack on start
+   , hideOnStart  = False   -- start with window unmapped (hidden)
+   , allDesktops  = True    -- show on all desktops
+   , persistent   = True    -- enable/disable hiding (True = disabled)
+   , iconRoot     = ".xmonad/xpm/"
+
+   -- layout
+   , sepChar =  "%"   -- delineator between plugin names and straight text
+   , alignSep = "}{"  -- separator between left-right alignment
+   , template = " <icon=haskell_20.xpm/>   <fc=#666666>|</fc> %UnsafeStdinReader% <fc=#666666> <fn=1>|</fn> </fc> <box type=Bottom width=2 mb=2 color=#ffcdb2><fc=#ffcdb2><action=`alacritty -e top`>%cpu%</action></fc></box> <fc=#666666> <fn=1>|</fn> </fc> <box type=Bottom width=2 mb=2 color=#ffcdb2><fc=#ffcdb2><action=`alacritty -e top`>%memory%</action></fc></box> <fc=#666666> <fn=1>|</fn> </fc> <box type=Bottom width=2 mb=2 color=#ffcdb2><fc=#ffcdb2><action=`alacritty -e top`>%dynnetwork%</action></fc></box>}{ <box type=Bottom width=2 mb=1 color=#82AAFF><fc=#82AAFF>  <action=`alacritty -e redshift -x >> /dev/null`><fn=2></fn> Flux day</action> </fc></box>  <box type=Bottom width=2 mb=1 color=#82AAFF><fc=#82AAFF><fn=2></fn>  <action=`alacritty -e redshift -x >> /dev/null && redshift -O 2000 >> /dev/null`>Flux Night</action> </fc></box>  <box type=Bottom width=2 mb=1 color=#82AAFF><fc=#82AAFF><fn=2></fn>  <action=`alacritty -e sudo bluetoothctl -- connect 4C:87:5D:2C:57:6A`>BT_CON</action> </fc></box>  <box type=Bottom width=2 mb=1 color=#82AAFF><fc=#82AAFF><fn=2></fn>  <action=`alacritty -e sudo /bin/bash /home/gramar/code/arch_config/bash/bt_clear.sh`>BT_RE</action> </fc></box>  <box type=Bottom width=2 mb=1 color=#82AAFF><fc=#82AAFF><fn=2></fn>  <action=`alacritty -e sudo bluetoothctl -- disconnect 4C:87:5D:2C:57:6A`>BT_DC</action> </fc></box>  <box type=Bottom width=2 mb=1 color=#82AAFF><fc=#82AAFF><fn=2></fn>  <action=`alacritty -e xscreensaver-command -lock`>Lock</action> </fc></box>  <box type=Bottom width=2 mb=1 color=#82AAFF><fc=#82AAFF><fn=2></fn>  <action=`alacritty -e systemctl hibernate`>Hibernate</action> </fc></box>  <box type=Bottom width=2 mb=1 color=#82AAFF><fc=#82AAFF><fn=2></fn>  <action=`alacritty -e shutdown -h now`>Off</action> </fc></box> <fc=#666666> <fn=1>|</fn> </fc> %ESSA% <fc=#666666> <fn=1>|</fn> </fc> %date% <fc=#666666> <fn=1>||</fn> </fc> %kbd% "
+
+   -- plugins
+   --   Numbers can be automatically colored according to their value. xmobar
+   --   decides color based on a three-tier/two-cutoff system, controlled by
+   --   command options:
+   --     --Low sets the low cutoff
+   --     --High sets the high cutoff
+   --
+   --     --low sets the color below --Low cutoff
+   --     --normal sets the color between --Low and --High cutoffs
+   --     --High sets the color above --High cutoff
+   --
+   --   The --template option controls how the plugin is displayed. Text
+   --   color can be set by enclosing in <fc></fc> tags. For more details
+   --   see http://projects.haskell.org/xmobar/#system-monitor-plugins.
+   , commands =
+
+        -- weather monitor
+        [ Run Weather "ESSA" [ "--template", " <fc=#82AAFF><skyCondition></fc> <fc=#666666><fn=1>|</fn> </fc> <fc=#82AAFF><tempC>C</fc><fc=#666666> <fn=1>|</fn> </fc> <fc=#82AAFF><rh>%</fc> <fc=#666666> <fn=1>|</fn> </fc> <fc=#82AAFF><pressure>hPa</fc>"
+                             ] 36000
+
+        -- network activity monitor (dynamic interface resolution)
+        , Run DynNetwork     [ "--template" , "<fn=2>\xf019</fn> <rx>kB/s   <fn=2>\xf093</fn> <tx>kB/s"
+                             , "--Low"      , "10000000"       -- units: B/s
+                             , "--High"     , "50000000"       -- units: B/s
+                             , "--high"     , "red"
+                             ] 10
+
+        -- Cpu usage in percent
+        , Run Cpu ["-t", "<fn=2>\xf108</fn>  cpu: (<total>%)","-H","50","--high","red"] 20
+        -- Ram used number and percent
+        , Run Memory ["-t", "<fn=2>\xf233</fn>  mem: <used>M (<usedratio>%)"] 20
+
+		
+        -- time and date indicator
+        --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
+        , Run Date           "<fc=#82AAFF>%F (%a) %T</fc>" "date" 10
+
+        -- keyboard layout indicator
+        , Run Kbd            [ ("se"         , "<fc=#82AAFF>SE</fc>")
+                             , ("us"         , "<fc=#8B0000>US</fc>")
+                             , ("us(dvorak)" , "<fc=#00008B>DV</fc>")
+                             ]
+        , Run UnsafeStdinReader
+        ]
+   }
+

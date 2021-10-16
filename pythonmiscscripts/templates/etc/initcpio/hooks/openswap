@@ -1,0 +1,16 @@
+run_hook()
+{
+    ## Optional: To avoid race conditions
+    x=0;
+    while [ ! -b /dev/mapper/croot ] && [ $x -le 10 ]; do
+       x=$((x+1))
+       sleep .2
+    done
+    ## End of optional
+
+    mkdir crypto_key_device
+    mount /dev/mapper/croot crypto_key_device
+    cryptsetup open --key-file crypto_key_device{{%SWAP_KEY_FILE%}} /dev/{{%SWAP_PART%}} cswap
+    umount crypto_key_device
+}
+

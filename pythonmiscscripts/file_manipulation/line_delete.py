@@ -1,6 +1,5 @@
-from pythonmiscscripts.file_manipulation.file_modifier import LineParser, FileModifier, \
-    OpenFileModification, ManipulationResult
-from dataclasses import dataclass
+from pythonmiscscripts.file_manipulation.file_modifier import FileModifier, \
+    OpenFileModification
 
 
 def delete_on_match(file_name: str, match: str, lines_above=0, remove=0):
@@ -23,3 +22,11 @@ def modify(f: OpenFileModification, match, lines_above, remove) -> bool:
                 f.output_lines.pop()
                 skip -= 1
     return rem
+
+
+if __name__ == "__main__":
+    fmod = FileModifier("line_delete.txt", [])
+    f = fmod.read_lines_and_trim_parsers()
+    print(modify(f, "delete1", 0, 2))
+    print(f.output_lines)
+

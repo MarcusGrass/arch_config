@@ -1,5 +1,5 @@
-from pythonmiscscripts.file_manipulation.line_replace import replace_on_match, modify
 from pythonmiscscripts.file_manipulation.file_modifier import LineParser, FileModifier, ManipulationResult
+from pythonmiscscripts.file_manipulation.line_replace import replace_on_match, modify
 
 
 def insert_unique_to_list(file_name: str, items: [str], start_str: str, list_start: str,
@@ -23,6 +23,9 @@ def internal_list_mutation(line: str, items: [str], start_str: str, list_start: 
     current = line[list_s_ind + 1:list_e_ind].split(list_sep)
     if len(current) == 1 and current[0] == "":
         current = list()
+    for item in items:
+        if item in current:
+            current.remove(item)
     for item in items:
         if item not in current:
             current.append(item)

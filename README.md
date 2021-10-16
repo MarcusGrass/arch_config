@@ -13,7 +13,7 @@ SWAP = 2*RAM
 ROOT ~ 10% Of total, at least 30G  
 HOME = remaining  
 
-* [**Encrypted disk**](install/encrypted_disks.md)  
+* [**Encrypted disk**](install/install_instructions.md)  
 * [**Dual Boot**](install/dual_boot.md)  
 * [**Bluetooth**](install/bluetooth.md)  
 * [**Nice to haves**](install/nice_to_haves.md)  

@@ -1,0 +1,8 @@
+<box type=Bottom width=2 mb=2 color=#51afef><fc=#51afef><fn=3>*</fn>  <action=`urxvt -e redshift -x >> /dev/null`>Flux day</action> </fc></box>
+<box type=Bottom width=2 mb=2 color=#51afef><fc=#51afef><fn=3>*</fn>  <action=`urxvt -e redshift -x >> /dev/null && redshift -O 2000 >> /dev/null`>Flux Night</action> </fc></box>
+<box type=Bottom width=2 mb=2 color=#51afef><fc=#51afef><fn=3>*</fn>  <action=`urxvt -e sudo bluetoothctl -- connect 4C:87:5D:2C:57:6A`>BT_CON</action> </fc></box>
+<box type=Bottom width=2 mb=2 color=#51afef><fc=#51afef><fn=3>*</fn>  <action=`urxvt -e sudo /bin/bash /home/gramar/code/arch_config/bash/bt_clear.sh`>BT_RE</action> </fc></box>
+<box type=Bottom width=2 mb=2 color=#51afef><fc=#51afef><fn=3>*</fn>  <action=`urxvt -e sudo bluetoothctl -- disconnect 4C:87:5D:2C:57:6A`>BT_DC</action> </fc></box>
+<box type=Bottom width=2 mb=2 color=#51afef><fc=#51afef><fn=3>*</fn>  <action=`urxvt -e xscreensaver-command -lock`>Lock</action> </fc></box>
+<box type=Bottom width=2 mb=2 color=#51afef><fc=#51afef><fn=3>*</fn>  <action=`urxvt -e systemctl hibernate`>Hibernate</action> </fc></box>
+<box type=Bottom width=2 mb=2 color=#51afef><fc=#51afef><fn=3>*</fn>  <action=`urxvt -e shutdown -h now`>Off</action> </fc></box>
